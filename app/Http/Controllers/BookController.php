@@ -2,8 +2,12 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Resources\BookCollection;
+use App\Http\Resources\BookResource;
 use App\Models\Book;
 use Illuminate\Http\Request;
+
+use function MongoDB\BSON\toJSON;
 
 class BookController extends Controller
 {
@@ -12,7 +16,7 @@ class BookController extends Controller
      */
     public function index()
     {
-        //
+        return new BookCollection(Book::paginate(5));
     }
 
     /**
@@ -28,7 +32,7 @@ class BookController extends Controller
      */
     public function show(Book $book)
     {
-        //
+        return new BookResource($book);
     }
 
     /**
