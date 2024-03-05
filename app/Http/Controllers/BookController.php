@@ -15,34 +15,35 @@ class BookController extends Controller
      */
     public function index(Request $request)
     {
-//        if($request->filled('s') ){
-//            $search = $request->get('s');
-//            return new BookCollection(Book::with(['genre', 'author.city'])
-//                ->where('title', 'like', "%{$search}%")
-//                ->paginate(5)
-//                ->appends('s', $search)
-//            );
-//        }
-//        return new BookCollection(Book::with(['genre', 'author.city'])->paginate(5));
-
         $query = Book::with(['genre', 'author.city']);
-        if($request->filled('s') ) {
+        if ($request->filled('s')) {
             $search = $request->get('s');
             $query->where('title', 'like', "%{$search}%");
         }
 
-        if ($request->filled('lp') || $request->filled('hp')){
+        if ($request->filled('lp') || $request->filled('hp')) {
             $lp = $request->get('lp', 0);
             $hp = $request->get('hp', PHP_INT_MAX);
             $query->havingBetween('price', [$lp, $hp]);
-
         }
 
-        if ($request->filled('genre')){
+        if ($request->filled('genre')) {
             $genre = $request->get('genre');
             $query->whereHas('genre', function (Builder $query) use ($genre) {
                 $query->where('name', $genre);
-            })->get();
+            });
+        }
+
+        if ($request->filled('city')) {
+            $cityId = $request->get('city');
+            $query->whereHas('author.city', function ($query) use ($cityId) {
+                $query->where('id', $cityId);
+            });
+        }
+
+        if ($request->filled('sort')) {
+            $sorted = $request->get('sort');
+            $query->orderBy('price', $sorted);
         }
 
         $books = $query->paginate(5);
@@ -50,7 +51,6 @@ class BookController extends Controller
         $books->appends($request->except('page'));
 
         return new BookCollection($books);
-
     }
 
     /**
