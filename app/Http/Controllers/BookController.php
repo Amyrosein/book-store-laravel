@@ -7,6 +7,7 @@ use App\Http\Resources\BookResource;
 use App\Models\Book;
 use Illuminate\Http\Request;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Validation\Rule;
 
 class BookController extends Controller
 {
@@ -66,7 +67,7 @@ class BookController extends Controller
      */
     public function show(Book $book)
     {
-        return new BookResource($book);
+        return new BookResource($book->load(['genre', 'author.city']));
     }
 
     /**
@@ -74,7 +75,23 @@ class BookController extends Controller
      */
     public function update(Request $request, Book $book)
     {
-        //
+        $validated = $request->validate([
+            "title"        => ['required', 'string', 'max:30'],
+            "release_date" => ['required', 'date'],
+            "isbn"         => [
+                'required',
+                'string',
+                'max:13',
+                Rule::unique('books')->ignore($book->id), // Ignore the current book's ISBN
+            ],
+            "price"        => ['required', 'integer'],
+            "genre_id"     => ['required', 'exists:genres,id', 'integer'],
+            "author_id"    => ['required', 'exists:authors,id', 'integer'],
+        ]);
+
+        $book->update($validated);
+
+        return new BookResource($book->load(['genre', 'author.city']));
     }
 
     /**

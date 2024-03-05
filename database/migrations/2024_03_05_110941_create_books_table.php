@@ -15,7 +15,7 @@ return new class extends Migration
             $table->id();
             $table->string('title', 25);
             $table->date('release_date');
-            $table->string('isbn', 17);
+            $table->string('isbn', 17)->unique();
             $table->unsignedInteger('price');
             $table->timestamps();
         });
