@@ -21,10 +21,10 @@ class BookResource extends JsonResource
             'isbn'        => $this->isbn,
             'price'       => $this->price,
             'releaseDate' => $this->release_date,
-            'genre'       => $this->whenLoaded('genre', '12'),
+            'genre'       => $this->whenLoaded('genre')->name,
             'author'      => [
-                'fullName' => $this->author->first_name . " " . $this->author->last_name,
-                'city'     => $this->author->city->name,
+                'fullName' => $this->whenLoaded('author')->first_name . " " . $this->whenLoaded('author')->last_name,
+                'city'     => $this->whenLoaded('author')->city->name,
             ],
         ];
     }

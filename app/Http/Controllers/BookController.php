@@ -16,7 +16,7 @@ class BookController extends Controller
      */
     public function index()
     {
-        return new BookCollection(Book::paginate(5));
+        return new BookCollection(Book::with(['genre', 'author.city'])->paginate(5));
     }
 
     /**
