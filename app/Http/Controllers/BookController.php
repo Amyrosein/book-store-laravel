@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\UpdateBookRequest;
 use App\Http\Resources\BookCollection;
 use App\Http\Resources\BookResource;
 use App\Models\Book;
@@ -59,7 +60,7 @@ class BookController extends Controller
      */
     public function store(Request $request)
     {
-        //
+
     }
 
     /**
@@ -73,22 +74,9 @@ class BookController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, Book $book)
+    public function update(UpdateBookRequest $request, Book $book)
     {
-        $validated = $request->validate([
-            "title"        => ['required', 'string', 'max:30'],
-            "release_date" => ['required', 'date'],
-            "isbn"         => [
-                'required',
-                'string',
-                'max:13',
-                Rule::unique('books')->ignore($book->id), // Ignore the current book's ISBN
-            ],
-            "price"        => ['required', 'integer'],
-            "genre_id"     => ['required', 'exists:genres,id', 'integer'],
-            "author_id"    => ['required', 'exists:authors,id', 'integer'],
-        ]);
-
+        $validated = $request->validated();
         $book->update($validated);
 
         return new BookResource($book->load(['genre', 'author.city']));
