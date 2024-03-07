@@ -13,11 +13,11 @@ return new class extends Migration
     {
         Schema::create('users', function (Blueprint $table) {
             $table->id();
-            $table->string('name');
-            $table->string('email')->unique();
-            $table->timestamp('email_verified_at')->nullable();
-            $table->string('password');
-            $table->rememberToken();
+            $table->string('first_name', 31);
+            $table->string('last_name', 31);
+            $table->string('phone', 11)->unique();
+            $table->boolean('is_vip')->default(false);
+            $table->dateTime('vip_expires_at')->nullable();
             $table->timestamps();
         });
     }
