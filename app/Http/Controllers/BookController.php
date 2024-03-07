@@ -2,13 +2,13 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\StoreBookRequest;
 use App\Http\Requests\UpdateBookRequest;
 use App\Http\Resources\BookCollection;
 use App\Http\Resources\BookResource;
 use App\Models\Book;
 use Illuminate\Http\Request;
 use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Validation\Rule;
 
 class BookController extends Controller
 {
@@ -58,9 +58,16 @@ class BookController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
+    public function store(StoreBookRequest $request)
     {
-
+        $validated = $request->validated();
+        $new_book = Book::create($validated);
+        return response()->json(
+            data:[
+                'message' => "Book {$new_book->id} has been created successfully"
+            ],
+            status:201
+        );
     }
 
     /**
