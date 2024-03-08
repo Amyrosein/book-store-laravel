@@ -8,7 +8,7 @@ use App\Http\Controllers\AuthController;
 Route::apiResource('books', BookController::class);
 
 Route::post('/register', [AuthController::class, 'register']);
-Route::post('/login', [AuthController::class, 'login']);
+Route::post('/login', [AuthController::class, 'login'])->middleware('throttle:5,2');
 Route::post('/login/otp', [AuthController::class, 'validate_otp']);
 
 Route::middleware('auth:sanctum')->group(function (){
