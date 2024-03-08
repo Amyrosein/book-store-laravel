@@ -6,7 +6,6 @@ use App\Models\User;
 use Ichtrojan\Otp\Otp;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Http;
-use Kavenegar\KavenegarApi;
 
 class AuthController extends Controller
 {
@@ -25,18 +24,11 @@ class AuthController extends Controller
 
         $res      = Http::get($kaveh_negar_url, $data);
         $res_obj = $res->object()->return;
-        if ($res_obj->status == 200) {
-            return response()->json([
-                'status'  => true,
-                'message' => $res_obj->message,
-            ], 200);
-        }
-
         return response()->json([
-            'status'  => false,
+            'status' => $res_obj->status == 200,
+            'code'  => $res_obj->status,
             'message' => $res_obj->message,
-            'code'    => $res_obj->status,
-        ], 401);
+        ], $res_obj->status == 200 ? 200 : 401);
     }
 
     public function generate_otp($phone)
@@ -102,5 +94,28 @@ class AuthController extends Controller
             'message' => "Login failed",
             'error'   => $otp->message,
         ], 401);
+    }
+
+    public function buy_vip(Request $request)
+    {
+        // check if user is vip
+        $user = $request->user();
+        if ($user->is_vip && $user->vip_expires_at > now()){
+            return response()->json([
+                'message' => "User already is VIP",
+                "status" => false,
+            ], 409);
+        }
+        // Buying VIP
+
+        // updating user vip status
+        $user->is_vip = true;
+        $user->vip_expires_at = now()->addMonth();
+        $user->save();
+
+        return response()->json([
+            'message' => 'user is VIP from now',
+            'status' => true
+        ], 200);
     }
 }
