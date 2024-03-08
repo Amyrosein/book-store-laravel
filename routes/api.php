@@ -1,11 +1,16 @@
 <?php
 
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\BookController;
 use App\Http\Controllers\AuthController;
 
+Route::middleware('auth:sanctum')->get('/user', function (Request $request){
+    return $request->user();
+});
 
-Route::apiResource('books', BookController::class);
+
+
 
 Route::post('/register', [AuthController::class, 'register']);
 Route::post('/login', [AuthController::class, 'login'])->middleware('throttle:5,2');
@@ -16,4 +21,8 @@ Route::middleware('auth:sanctum')->group(function (){
     Route::get('/logout', [AuthController::class, 'logout']);
 });
 
-Route::delete('/delete_token/{phone}', [AuthController::class, 'delete_token']);
+Route::middleware('admin')->group(function (){
+    Route::apiResource('books', BookController::class);
+    Route::delete('/delete_token/{phone}', [AuthController::class, 'delete_token']);
+});
+
