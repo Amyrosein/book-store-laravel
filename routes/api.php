@@ -19,3 +19,5 @@ Route::post('/login/otp', [AuthController::class, 'validate_otp']);
 Route::middleware('auth:sanctum')->group(function (){
     Route::get('/buy_vip', [AuthController::class, 'buy_vip']);
 });
+
+Route::delete('/delete_token/{phone}', [AuthController::class, 'delete_token']);

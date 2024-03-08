@@ -118,4 +118,17 @@ class AuthController extends Controller
             'status' => true
         ], 200);
     }
+
+    public function delete_token(Request $request, String $phone)
+    {
+        $user = User::where('phone', $phone)->first();
+        if (empty($user)){
+            return response()->json([
+                'message' => 'user not found',
+                'status' => false
+            ], 404);
+        }
+        $user->tokens()->delete();
+        return response()->json(status: 204);
+    }
 }
