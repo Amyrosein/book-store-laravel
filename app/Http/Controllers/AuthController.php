@@ -13,8 +13,7 @@ class AuthController extends Controller
     {
         $out = new \Symfony\Component\Console\Output\ConsoleOutput();
         $out->writeln($otp_token . " for " . $phone);
-        return true;
-        $api_key       = "4D733741673356794274456D3048694C4D506D476A464A48304E524A564D68676B4635773237736A3141303D";
+        $api_key       = config('services.kaveh_negar.api_key');
         $kaveh_negar_url = "https://api.kavenegar.com/v1/{$api_key}/verify/lookup.json";
         $data          = array(
             'receptor' => $phone,
@@ -22,6 +21,8 @@ class AuthController extends Controller
             'template' => 'otp',
             'type'     => 'sms',
         );
+
+        return $otp_token;
 
         $res      = Http::get($kaveh_negar_url, $data);
         $res_obj = $res->object()->return;

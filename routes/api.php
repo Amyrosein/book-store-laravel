@@ -4,6 +4,8 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\BookController;
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\ReservationController;
+
 
 Route::middleware('auth:sanctum')->get('/user', function (Request $request){
     return $request->user();
@@ -19,10 +21,13 @@ Route::post('/login/otp', [AuthController::class, 'validate_otp']);
 Route::middleware('auth:sanctum')->group(function (){
     Route::get('/buy_vip', [AuthController::class, 'buy_vip']);
     Route::get('/logout', [AuthController::class, 'logout']);
+    Route::post('/reserve_book/', [ReservationController::class, 'reserve_book']);
+
 });
 
 Route::middleware('admin')->group(function (){
     Route::apiResource('books', BookController::class);
     Route::delete('/delete_token/{phone}', [AuthController::class, 'delete_token']);
 });
+
 

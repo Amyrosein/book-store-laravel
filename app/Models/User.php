@@ -4,12 +4,13 @@ namespace App\Models;
 
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
 
 /**
- *
+ * 
  *
  * @property int                                                                                                                $id
  * @property string                                                                                                             $name
@@ -35,6 +36,20 @@ use Laravel\Sanctum\HasApiTokens;
  * @method static \Illuminate\Database\Eloquent\Builder|User wherePassword($value)
  * @method static \Illuminate\Database\Eloquent\Builder|User whereRememberToken($value)
  * @method static \Illuminate\Database\Eloquent\Builder|User whereUpdatedAt($value)
+ * @property string $first_name
+ * @property string $last_name
+ * @property string $phone
+ * @property int $is_vip
+ * @property string|null $vip_expires_at
+ * @property int $is_admin
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Reservation> $reservations
+ * @property-read int|null $reservations_count
+ * @method static \Illuminate\Database\Eloquent\Builder|User whereFirstName($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|User whereIsAdmin($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|User whereIsVip($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|User whereLastName($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|User wherePhone($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|User whereVipExpiresAt($value)
  * @mixin \Eloquent
  */
 class User extends Authenticatable
@@ -62,8 +77,17 @@ class User extends Authenticatable
         'updated_at',
     ];
 
-    public function is_admin()
+    public function is_admin(): bool
     {
         return $this->is_admin;
+    }
+    public function is_vip(): bool
+    {
+        return (($this->is_vip) && ($this->vip_expires_at > now()));
+    }
+
+    public function reservations(): HasMany
+    {
+        return  $this->hasMany(Reservation::class);
     }
 }
