@@ -22,7 +22,7 @@ Route::middleware('auth:sanctum')->group(function (){
     Route::get('/buy_vip', [AuthController::class, 'buy_vip']);
     Route::get('/logout', [AuthController::class, 'logout']);
     Route::post('/reserve_book/', [ReservationController::class, 'reserve_book']);
-
+    Route::post('/reserved_books/', [ReservationController::class, 'reserved_books']);
 });
 
 Route::middleware('admin')->group(function (){
