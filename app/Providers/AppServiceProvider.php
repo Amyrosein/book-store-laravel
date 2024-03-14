@@ -5,6 +5,7 @@ namespace App\Providers;
 use App\Http\Resources\BookCollection;
 use App\Http\Resources\BookResource;
 use Illuminate\Support\ServiceProvider;
+use Illuminate\Support\Facades\Schema;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -22,5 +23,6 @@ class AppServiceProvider extends ServiceProvider
     public function boot(): void
     {
         BookResource::withoutWrapping();
+        Schema::defaultStringLength(191);
     }
 }
