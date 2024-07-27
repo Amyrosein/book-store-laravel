@@ -18,16 +18,17 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
-//        City::factory(5)->create();
-//        Author::factory(10)->create();
-//        Genre::factory()->create(['name' =>  'جنایی']);
-//        Genre::factory()->create(['name' =>  'ترسناک']);
-//        Genre::factory()->create(['name' =>  'پلیسی']);
-//        Genre::factory()->create(['name' =>  'معمایی']);
-//        Genre::factory()->create(['name' =>  'علمی']);
-//        Genre::factory()->create(['name' =>  'اکشن']);
-//        Genre::factory()->create(['name' =>  'رومان']);
-//        Book::factory(20)->create();
+//        \App\Models\User::factory(10)->create();
+        City::factory(5)->create();
+        Author::factory(10)->create();
+        Genre::factory()->create(['name' =>  'جنایی']);
+        Genre::factory()->create(['name' =>  'ترسناک']);
+        Genre::factory()->create(['name' =>  'پلیسی']);
+        Genre::factory()->create(['name' =>  'معمایی']);
+        Genre::factory()->create(['name' =>  'علمی']);
+        Genre::factory()->create(['name' =>  'اکشن']);
+        Genre::factory()->create(['name' =>  'رومان']);
+        Book::factory(20)->create();
 
 
         $start = Carbon::parse('2024-01-01');
@@ -58,11 +59,5 @@ class DatabaseSeeder extends Seeder
                 return mt_rand(1, 7) * 1000;
             },
         ]);
-        // \App\Models\User::factory(10)->create();
-
-        // \App\Models\User::factory()->create([
-        //     'name' => 'Test User',
-        //     'email' => 'test@example.com',
-        // ]);
     }
 }

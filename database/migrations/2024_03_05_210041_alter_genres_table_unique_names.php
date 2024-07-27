@@ -22,7 +22,7 @@ return new class extends Migration
     public function down(): void
     {
         Schema::table('genres', function (Blueprint $table) {
-            $table->dropUnique('name');
+            $table->dropUnique('genres_name_unique');
         });
     }
 };
